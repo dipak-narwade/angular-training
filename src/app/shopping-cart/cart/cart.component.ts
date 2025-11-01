@@ -1,25 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Item as CartItem } from '../models/Item';
+import { CartService } from '../cart.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { ItemComponent } from '../item/item.component';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ItemComponent],
   templateUrl: './cart.component.html',
-  styleUrl: './cart.component.css'
+  styleUrls: ['./cart.component.css']
 })
-export class CartComponent {
- cartItems: CartItem[] = [];
+export class CartComponent implements OnInit {
+  cartItems: CartItem[] = [];
   totalPrice = 0;
 
-  constructor() {}
+  //Constructor 
+  constructor(private cartService: CartService) { }  //DI
 
-  loadCart() {}
+  ngOnInit(): void {
+    this.loadCart();
+  }
 
-  removeItem(id: number) { }
+  loadCart() {
+    this.cartItems = this.cartService.getCartItems();
+    this.totalPrice = this.cartService.getTotalPrice();
+    console.log('cart Components loaded');
+  }
 
-  clearCart() { }
+  removeItem(id: number) {
+    this.cartService.removeFromCart(id);
+    this.loadCart();
+  }
+
+  clearCart() {
+    this.cartService.clearCart();
+    this.loadCart();
+  }
 }
