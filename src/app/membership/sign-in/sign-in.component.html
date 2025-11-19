@@ -1,25 +1,19 @@
-<div >
-  <h1>Login</h1>
-
-   <div >   
-       <form #loginform="ngForm" (ngSubmit)="onSubmit(loginform.value)"
-       >
-        <table>
-              <tr>
-                <td><label>Email:</label></td>
-                <td> 
-                  <input type="email" name="userEmail" 
-                         required  pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$" />
-              </tr>
-              <tr>
-                <td><label>Password:</label></td>
-                <input type="password" name="userPassword" required />
-              
-              </tr>   
-              <tr>
-                  <td><button type="submit" > Submit</button> </td>
-              </tr>
+<div class="right">
+  <div *ngIf="message"  > {{ message }} </div>
+  <div>
+    <form  *ngIf="!authService.getUser()">
+      <table>
+        <tr> 
+            <td><input  name="username" #username placeholder="User Name"></td>
+            <td> <input  type="password" name="password" #password placeholder="password"> </td>
+            <td><a (click)="login(username.value, password.value)" href=""> Login </a></td>
+        </tr>  
         </table>
-    </form>
+  </form>
+  </div>   
+  
+    <div  *ngIf="authService.getUser()">
+       Welcome <b>{{authService.getUser() |uppercase}}</b>
+        <a href (click)="logout()">Log out</a>
     </div>
 </div>
